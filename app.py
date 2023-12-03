@@ -69,7 +69,7 @@ PAGE_ACCESS_TOKEN="EAAMfE8HUFEUBO4txJA9MYXrZAZCthffZAIZBFxckQ8aUIz66H4skDBc5bW2w
 API= "https://graph.facebook.com/LATEST-API-VERSION/me/messages?access_token="+PAGE_ACCESS_TOKEN
 
 
-
+CONNECTION_STRING="mongodb+srv://mohamedaminetouihri9:OUGCjVq1Kg6OAfrM@cluster0.iym5nvs.mongodb.net/?retryWrites=true&w=majority"
 
 
 
