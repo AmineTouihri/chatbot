@@ -1,0 +1,10 @@
+style pages (for now i have only one page index.html for the page owner (ssr))
+
+admin pages (secure routes)
+
+security and testing 
+
+deploy it on git 
+
+add .env file (it doesnt work )
+
