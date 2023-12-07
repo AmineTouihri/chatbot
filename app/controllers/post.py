@@ -14,6 +14,7 @@ def createPost(pageId):
 
     upload_files=request.files.getlist('photos')
     description=request.form.get('description')
+    postUrl=request.form.get('postUrl')
     
     
     filePaths=[]
@@ -25,7 +26,7 @@ def createPost(pageId):
             
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'],filePath))
     
-    newPost=Post(description,filePaths)
+    newPost=Post(description,filePaths,postUrl)
 
             # next error to solve is that the new posts doesent insert into the table but is saved into the server
 
@@ -41,6 +42,12 @@ def createPost(pageId):
     else:
         return "cant save files pages doesent exist",404
 
+def getPosts(pageId):
+    page=getPageByPageId(pageId)
+
+    if page==-1:
+        return -1
+    return page['posts']
 
     
         
