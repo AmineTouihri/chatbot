@@ -4,9 +4,15 @@ from flask import Flask,render_template,request
 
 from app.routes.page_route import page_bp
 
+from app.routes.webhook import webhook_bp
+
 from app.controllers.post import getPosts
 
 from datetime import datetime
+
+from app.controllers.autoReplyMethods import extract_post_id_from_permalink
+
+from app.controllers.autoReplyMethods import attatchmentIsImage,attachmentIsFallBack,messageIsText
 # from models.post import Post
 
 # from controllers.page import createPage
@@ -39,9 +45,13 @@ userId="158726557314858"
 
 app.register_blueprint(page_bp)
 
+app.register_blueprint(webhook_bp)
+
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
+
+
 
 
 
@@ -63,98 +73,34 @@ def fbverify():
     return "Hello world", 200
 
 
-@app.route("/webhook", methods=['POST'])
-def fbwebhook():
-    data = request.get_json()
-    print(data)
+# @app.route("/webhook", methods=['POST'])
+# def fbwebhook():
+#     data = request.get_json()
+#     print(data)
     
-        # Read messages from facebook messanger.
-    message = data['entry'][0]['messaging'][0]['message']
-    sender_id = data['entry'][0]['messaging'][0]['sender']['id']
-    pageId=str(data['entry'][0]['id'])
+#         # Read messages from facebook messanger.
+#     message = data['entry'][0]['messaging'][0]['message']
+#     sender_id = data['entry'][0]['messaging'][0]['sender']['id']
+#     pageId=str(data['entry'][0]['id'])
 
-    if 'text' in message :
-        if message['text'] == "hi":
-            request_body = {
-                "recipient": {
-                    "id": sender_id
-                },
-                "message": {
-                    "text": "hello, world!"
-                }
-            }
-            response = requests.post(API, json=request_body).json()
-            print("from he says hi !")
-            print(response)
-            return response
-        elif message['text'] == "quick":
-            request_body = {
-                "recipient": {
-                    "id": sender_id
-                },
-                "messaging_type": "RESPONSE",
-                "message": {
-                    "text": "Pick a color:",
-                    "quick_replies": [
-                        {
-                            "content_type": "text",
-                            "title": "Red",
-                            "payload": "<POSTBACK_PAYLOAD>",
-                            "image_url": "http://example.com/img/red.png"
-                        }, {
-                            "content_type": "text",
-                            "title": "Green",
-                            "payload": "<POSTBACK_PAYLOAD>",
-                            "image_url": "http://example.com/img/green.png"
-                        }
-                    ]
-                }
-            }
-            response = requests.post(API, json=request_body).json()
-            return response
-    elif 'attachments' in message :
-        for attachment in message['attachments']:
-            print(attachment)
-            if attachment['type']=='image':
-                print("im into image")
-                image_url=attachment['payload']['url']
-                image_response=requests.get(image_url)
-                if image_response.status_code==200:
-                    file_name=os.path.join(UPLOAD_FOLDER,"recivedimage.jpg")
-                    with open(file_name, 'wb') as image_file:
-                        image_file.write(image_response.content)
+#     if 'text' in message :
+#         response=messageIsText(message,API,sender_id)
+#         if response :
+#             return response
 
-                    result=compareTwoImages(pageId)
-                    if (result!=-1 or result!=-2):
-                        request_body={
-                            "recipient":{"id":sender_id},
-                            "message":{"text":result}
-                        }
-                        response=requests.post(API,json=request_body).json()
-                        return response
-            # if the customer sends the link of the whole post not image 
-            elif attachment['type']=='fallback':
-                post_url=attachment['payload']['url']
-                posts=getPosts(pageId)
-                if posts==-1 :
-                    return "nothing",201
-                for post in posts:
-                    print("im from posts")
-                    print(post)
-                    if 'postUrl' in post :
-                        
-                        print("im into image url llllllllllll")
+#     elif 'attachments' in message :
+#         for attachment in message['attachments']:
+#             if attachment['type']=='image':
+#                response=attatchmentIsImage(attachment,pageId,sender_id,API)
+#                if(response):
+#                 return response
+#             # if the customer sends the link of the whole post not image 
+#             elif attachment['type']=='fallback':
+#                 response=attachmentIsFallBack(attachment,pageId,sender_id,API)
+#                 if response :
+#                     return response
 
-                        if post['postUrl']==post_url :
-                            request_body={
-                                "recipient":{"id":sender_id},
-                                "message":{"text":post['postDescription']}
-                            }
-                            response=requests.post(API,json=request_body).json()
-                            return response
-
-        
-    return "nothing",201
+#     return "nothing",201
 
 
 

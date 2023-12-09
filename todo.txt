@@ -8,3 +8,7 @@ deploy it on git
 
 add .env file (it doesnt work )
 
+
+create and refactor the admin page (admin can add new page to the bot took the new id from the page )
+
+
