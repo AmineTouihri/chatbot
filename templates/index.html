@@ -1,25 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <head>
+   
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Add your post</title>
+        <link rel="stylesheet" href="./static/styles.css" />
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+          rel="stylesheet"
+        />
     
-    <title>Document</title>
-</head>
+    
+    </head>
 <body>
     <form action="/createPost/{{ userId }}" method="post" enctype="multipart/form-data">
-        <input type="file" name="photos" multiple>
-        <div class="form-group">
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="4" cols="50" placeholder="Enter description..." required></textarea>
+      <h1>Add your Post</h1>
+      <div class="separation"></div>
+      <div class="corps-formulaire">
+        <div class="gauche">
+            <div class="groupe">
+               <label for="file">Photos:</label>
+               <input type="file" name="photos" multiple>
+              
+            </div>
+
+            <div class="groupe">
+                <label for="postUrl">PostUrl:</label>
+             
+                <input type="url" name="postUrl" id="postUrl" autocomplete="off" >
+                <i class="fas fa-user"></i>
+            </div>
         </div>
-        <div class="inputUrl">
-            <label for="postUrl">PostUrl:</label>
-            <input type="url" name="postUrl" id="postUrl">
+        <div class="droite">
+            <div class="groupe">
+              <label for="description">Description:</label>
+              <textarea placeholder="Saisissez ici..." placeholder="Enter description..." required></textarea>
+            </div>
         </div>
-        <input type="submit" value="Upload">
+    </div>
+  
+
+     <div class="pied-formulaire" align="center">
+       
+        <button type="submit">Upload</button>
+      </div>
+       
+       
     </form>
 </body>
 </html>
